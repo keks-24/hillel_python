@@ -65,13 +65,16 @@
 # Для примера, в строке "hello 1one two three15 world" есть три слова подряд.
 
 import random
-
+import operator
+import copy
+string_separator = '-----------------------'
 
 # 1 =======================================================
 def first_exercise():
-    key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    number_dict = dict({k: (k*k) for k in key})
-    print(number_dict)
+	key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	number_dict = dict({k: (k*k) for k in key})
+	print(number_dict)
+	print(string_separator)
 
 
 first_exercise()
@@ -79,8 +82,9 @@ first_exercise()
 
 # 2 =======================================================
 def second_exercise():
-    number_list = list(i for i in range(101) if i % 2 == 0)
-    print(number_list)
+	number_list = list(i for i in range(101) if i % 2 == 0)
+	print(number_list)
+	print(string_separator)
 
 
 second_exercise()
@@ -88,15 +92,15 @@ second_exercise()
 
 # 3 =======================================================
 def third_exercise():
-    vowels_letters = ['A', 'E', 'I', 'O', 'U', 'Y']
-    consonant_letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
-    some_string = '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                        tempor incididunt ut labore et dolore magna aliqua.'''
-    for vowel_letter in vowels_letters:
-        for letter_in_string in some_string:
-            if letter_in_string.lower() == vowel_letter.lower():
-                some_string = some_string.replace(letter_in_string, random.choice(consonant_letters))
-    print(some_string)
+	vowels_letters = ['A', 'E', 'I', 'O', 'U', 'Y']
+	consonant_letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
+	some_string = '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'''
+	for vowel_letter in vowels_letters:
+		for letter_in_string in some_string:
+			if letter_in_string.lower() == vowel_letter.lower():
+				some_string = some_string.replace(letter_in_string, random.choice(consonant_letters))
+	print(some_string)
+	print(string_separator)
 
 
 third_exercise()
@@ -104,9 +108,58 @@ third_exercise()
 
 # 4 =======================================================
 def fourth_exercise():
-    numbers = [10, 11, 2, 3, 5, 8, 23, 11, 2, 5, 76, 43, 2, 32, 76, 3, 10, 0, 1]
-    print(set(numbers)) # 4.1
-
+	numbers = [10, 11, 2, 3, 5, 8, 23, 11, 2, 5, 76, 43, 2, 32, 76, 3, 10, 0, 1]
+	print(set(numbers)) # 4.1
+	print(sorted(set(numbers))[-3:])
+	print(numbers.index(min(numbers)))
+	print(list(reversed(numbers)))
+	print(string_separator)
 
 
 fourth_exercise()
+
+
+# 5 =======================================================
+def five_exercise():
+	dict_one = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+	dict_two = {'a': 6, 'b': 7, 'z': 20, 'x': 40}
+
+	for key in set(dict_one).intersection(set(dict_two)):
+		print(key)
+	print(string_separator)
+
+
+five_exercise()
+
+
+# 6 =======================================================
+def six_exercise():
+	data = [{'name': 'Viktor', 'city': 'Kiev', 'age': 30},
+			{'name': 'Maksim', 'city': 'Dnepr', 'age': 20},
+			{'name': 'Vladimir', 'city': 'Lviv', 'age': 32},
+			{'name': 'Andrey', 'city': 'Kiev', 'age': 34},
+			{'name': 'Artem', 'city': 'Dnepr', 'age': 50},
+			{'name': 'Dmitriy', 'city': 'Lviv', 'age': 21}]
+	print(sorted(data, key=operator.itemgetter('age')))
+
+	print(string_separator + "6.2 =)")
+	city_sorted = sorted(data, key=operator.itemgetter('city'))
+	copy_city_sorted = copy.deepcopy(city_sorted)
+	result = {}
+	for element in city_sorted:
+		current_city = element['city']
+		persons_list = []
+		if current_city not in result.keys():
+			for person in copy_city_sorted:
+				if 'city' in person.keys():
+					if current_city == person['city']:
+						person.pop("city")
+						persons_list.append(person)
+			result[current_city] = persons_list
+		else:
+			pass
+
+	print(result)
+
+
+six_exercise()
