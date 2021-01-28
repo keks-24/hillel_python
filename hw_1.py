@@ -180,7 +180,26 @@ def seven_exercise(list_var):
 			main_count = count
 
 	print(finded_word)
+	print(string_separator)
 	return finded_word
 
 
 seven_exercise(['a', 'w', 'w', 'w', 'w', 'a', 'bi', 'bi', 'bi', 'w', 's'])
+
+
+# 8 =======================================================
+def eight_exercise():
+	given_value = str(1203405)
+	result = 1
+	if len(given_value) > 2:
+		for n in given_value:
+			if int(n) > 0:
+				result = result * int(n)
+	else:
+		result = int(given_value)
+
+	print(result)
+	print(string_separator)
+
+
+eight_exercise()
