@@ -203,3 +203,18 @@ def eight_exercise():
 
 
 eight_exercise()
+
+
+# 9 =======================================================
+def nine_exercise(array, n):
+	try:
+		num = array[n]
+		result = num ** n
+	except Exception as e:
+		#print(e)
+		result = '-1'
+
+	print(result)
+
+
+nine_exercise([1, 2, 3, 4, 5], 4)
