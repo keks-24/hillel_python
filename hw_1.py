@@ -67,6 +67,8 @@
 import random
 import operator
 import copy
+import pprint
+
 string_separator = '-----------------------'
 print(string_separator + ' 1')
 
@@ -93,13 +95,13 @@ print(string_separator + ' 3')
 
 # 3 =======================================================
 def third_exercise():
-	vowels_letters = ['A', 'E', 'I', 'O', 'U', 'Y']
-	consonant_letters = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z']
+	vowels_letters = ['a', 'e', 'i', 'o', 'u', 'y']
+	consonants_letters = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z']
 	some_string = '''Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'''
-	for vowel_letter in vowels_letters:
+	for contant_letter in consonants_letters:
 		for letter_in_string in some_string:
-			if letter_in_string.lower() == vowel_letter.lower():
-				some_string = some_string.replace(letter_in_string, random.choice(consonant_letters))
+			if letter_in_string.lower() == contant_letter:
+				some_string = some_string.replace(letter_in_string, random.choice(vowels_letters))
 	print(some_string)
 
 
@@ -110,7 +112,7 @@ print(string_separator + ' 4')
 # 4 =======================================================
 def fourth_exercise():
 	numbers = [10, 11, 2, 3, 5, 8, 23, 11, 2, 5, 76, 43, 2, 32, 76, 3, 10, 0, 1]
-	print(set(numbers)) # 4.1
+	print(list(set(numbers))) # 4.1
 	print(sorted(set(numbers))[-3:])
 	print(numbers.index(min(numbers)))
 	print(list(reversed(numbers)))
@@ -125,8 +127,7 @@ def five_exercise():
 	dict_one = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
 	dict_two = {'a': 6, 'b': 7, 'z': 20, 'x': 40}
 
-	for key in set(dict_one).intersection(set(dict_two)):
-		print(key)
+	print(dict_one.keys() & dict_two.keys()) # much better thx for advice
 
 
 five_exercise()
@@ -159,7 +160,7 @@ def six_exercise():
 		else:
 			pass
 
-	print(result)
+	pprint.pprint(result)
 
 
 six_exercise()
@@ -180,6 +181,7 @@ def seven_exercise(list_var):
 			main_count = count
 
 	print(finded_word)
+	print(max(set(list_var), key=list_var.count))
 	return finded_word
 
 
@@ -188,11 +190,10 @@ print(string_separator + ' 8')
 
 
 # 8 =======================================================
-def eight_exercise():
-	given_value = str(1203405)
+def eight_exercise(given_value):
 	result = 1
-	if len(given_value) > 2:
-		for n in given_value:
+	if len(str(given_value)) > 1:
+		for n in str(given_value):
 			if int(n) > 0:
 				result = result * int(n)
 	else:
@@ -201,7 +202,7 @@ def eight_exercise():
 	print(result)
 
 
-eight_exercise()
+eight_exercise(1203405)
 print(string_separator + ' 9')
 
 # 9 =======================================================
@@ -209,14 +210,14 @@ def nine_exercise(array, n):
 	try:
 		num = array[n]
 		result = num ** n
-	except Exception as e:
-		#print(e)
+	except IndexError as e:
+		# print(e)
 		result = '-1'
 
 	print(result)
 
 
-nine_exercise([1, 2, 3, 4, 5], 4)
+nine_exercise([1, 2, 3, 4, 5], 8)
 print(string_separator + ' 10')
 
 
