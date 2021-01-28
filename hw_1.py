@@ -62,32 +62,33 @@
 # =======================================================
 # 10) Есть строка со словами и числами, разделенными пробелами (один пробел между словами и/или числами).
 # Слова состоят только из букв. Вам нужно проверить есть ли в исходной строке три словаподряд.
-# Для примера, в строке "hello 1one two three15 world" есть три слова подряд.
+# Для примера, в строке "hello 1 one two three 15 world" есть три слова подряд.
 
 import random
 import operator
 import copy
 string_separator = '-----------------------'
+print(string_separator + ' 1')
 
 # 1 =======================================================
 def first_exercise():
 	key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 	number_dict = dict({k: (k*k) for k in key})
 	print(number_dict)
-	print(string_separator)
 
 
 first_exercise()
+print(string_separator + ' 2')
 
 
 # 2 =======================================================
 def second_exercise():
 	number_list = list(i for i in range(101) if i % 2 == 0)
 	print(number_list)
-	print(string_separator)
 
 
 second_exercise()
+print(string_separator + ' 3')
 
 
 # 3 =======================================================
@@ -100,10 +101,10 @@ def third_exercise():
 			if letter_in_string.lower() == vowel_letter.lower():
 				some_string = some_string.replace(letter_in_string, random.choice(consonant_letters))
 	print(some_string)
-	print(string_separator)
 
 
 third_exercise()
+print(string_separator + ' 4')
 
 
 # 4 =======================================================
@@ -113,10 +114,10 @@ def fourth_exercise():
 	print(sorted(set(numbers))[-3:])
 	print(numbers.index(min(numbers)))
 	print(list(reversed(numbers)))
-	print(string_separator)
 
 
 fourth_exercise()
+print(string_separator + ' 5')
 
 
 # 5 =======================================================
@@ -126,11 +127,10 @@ def five_exercise():
 
 	for key in set(dict_one).intersection(set(dict_two)):
 		print(key)
-	print(string_separator)
 
 
 five_exercise()
-
+print(string_separator + ' 6')
 
 # 6 =======================================================
 def six_exercise():
@@ -160,10 +160,10 @@ def six_exercise():
 			pass
 
 	print(result)
-	print(string_separator)
 
 
 six_exercise()
+print(string_separator + ' 7')
 
 
 # 7 =======================================================
@@ -180,11 +180,11 @@ def seven_exercise(list_var):
 			main_count = count
 
 	print(finded_word)
-	print(string_separator)
 	return finded_word
 
 
 seven_exercise(['a', 'w', 'w', 'w', 'w', 'a', 'bi', 'bi', 'bi', 'w', 's'])
+print(string_separator + ' 8')
 
 
 # 8 =======================================================
@@ -199,11 +199,10 @@ def eight_exercise():
 		result = int(given_value)
 
 	print(result)
-	print(string_separator)
 
 
 eight_exercise()
-
+print(string_separator + ' 9')
 
 # 9 =======================================================
 def nine_exercise(array, n):
@@ -218,3 +217,24 @@ def nine_exercise(array, n):
 
 
 nine_exercise([1, 2, 3, 4, 5], 4)
+print(string_separator + ' 10')
+
+
+# 10 =======================================================
+def ten_exercise(given_string):
+	split_string = given_string.split(' ')
+	count = 0
+	for element in split_string:
+		if not element.isdigit():
+			count += 1
+		else:
+			count = 0
+		if count == 3:
+			print("find three words in row ")
+			break
+	if count < 3:
+		print("not found three words in row ")
+
+
+ten_exercise('fsd 21 gjghj 5 ghjgh hgjgh 5 ghjghj 2')
+print(string_separator + ' the end')
