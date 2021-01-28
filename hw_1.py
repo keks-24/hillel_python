@@ -160,6 +160,27 @@ def six_exercise():
 			pass
 
 	print(result)
+	print(string_separator)
 
 
 six_exercise()
+
+
+# 7 =======================================================
+def seven_exercise(list_var):
+	finded_word = ''
+	main_count = 0
+	for element in list_var:
+		count = 0
+		for n in list_var:
+			if element == n:
+				count += 1
+		if count > main_count:
+			finded_word = element
+			main_count = count
+
+	print(finded_word)
+	return finded_word
+
+
+seven_exercise(['a', 'w', 'w', 'w', 'w', 'a', 'bi', 'bi', 'bi', 'w', 's'])
