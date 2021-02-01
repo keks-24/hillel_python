@@ -1,25 +1,3 @@
-# **4)Given a 3x3 matrix of a completed tic-tac-toe game, create a function that returns whether the game is a win
-# for "X", "O", or a "Draw", where "X" and "O" represent themselves on the matrix, and "E" represents an empty spot.
-# Example:
-# tic_tac_toe([
-#     ["X", "O", "X"],
-#     ["O", "X", "O"],
-#     ["O", "X", "X"]
-# ]) ➞ "X"
-#
-# tic_tac_toe([
-#     ["O", "O", "O"],
-#     ["O", "X", "X"],
-#     ["E", "X", "X"]
-# ]) ➞ "O"
-#
-# tic_tac_toe([
-#     ["X", "X", "O"],
-#     ["O", "O", "X"],
-#     ["X", "X", "O"]
-# ]) ➞ "Draw"
-
-
 import random
 
 def rock_scissors_paper_game(user_item):
@@ -54,6 +32,7 @@ def rock_scissors_paper_game(user_item):
 
 print(rock_scissors_paper_game(input("Type: paper or scissors or rock ")))
 
+# ========================================================================
 
 def survive_without_TP(input_data):
 	"""This function calculate enough TP for survive on quarantine or not"""
@@ -72,9 +51,10 @@ def survive_without_TP(input_data):
 
 survive_without_TP({"people":6, "tp":10})
 
+# ========================================================================
 
 def encrypt_func(input_string):
-	"""function that encrypts a given input"""
+	"""function that encrypts a given input by two steps, reverse word and replace in it letters"""
 
 	reverse_input_string = list(reversed(input_string))
 	cart_dict = {"a":0, "e":1, "i":2, "o":2, "u": 3}
@@ -88,3 +68,35 @@ def encrypt_func(input_string):
 
 
 print(encrypt_func(input("Print some word: ")))
+
+# ========================================================================
+
+def tic_tac_toe(input):
+	"""result analyzer of tic_tac_toe game by given input"""
+
+	field_coordinates = list()
+	win_coordinates = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
+	finded_winner = ""
+
+	for line in input:
+		for letter in line:
+			if letter == "E":
+				return "Field has empty cell"
+			else:
+				field_coordinates.append(letter)
+
+	for elem in win_coordinates:
+		if field_coordinates[elem[0]] == field_coordinates[elem[1]] == field_coordinates[elem[2]]:
+			finded_winner = str(field_coordinates[elem[0]])
+			break
+
+	if finded_winner == "":
+		return "Draw"
+
+	return f"WINNER IS {finded_winner}"
+
+
+print(tic_tac_toe([["X", "O", "X"],
+				   ["O", "O", "X"],
+				   ["X", "X", "O"]
+				   ]))
