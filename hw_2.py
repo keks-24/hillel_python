@@ -1,16 +1,3 @@
-# 1) Write a function that emulates the game "rock, scissors, paper"
-# At the entrance, your function accepts your version printed from the console, the computer makes a decision randomly.
-
-# 2)Try to imagine a world in which you might have to stay home for (Corona virus) 14 days at any given time.
-# Do you have enough toilet paper(TP) to make it through?
-# Although the number of squares per roll of TP varies significantly, we'll assume each roll has 500 sheets,
-# and the average person uses 57 sheets per day.
-
-# Create a function that will receive a dictionary with two key/values:
-# "people" ⁠— Number of people in the household.
-# "tp" ⁠— Number of rolls.
-# Return a statement telling the user if they need to buy more TP!
-
 # 3) Make a function that encrypts a given input with these steps:
 # Input: "apple"
 # Step 1: Reverse the input: "elppa"
@@ -82,3 +69,19 @@ def rock_scissors_paper_game(user_item):
 
 
 print(rock_scissors_paper_game(input("Type: paper or scissors or rock ")))
+
+
+def survive_without_TP(input_data):
+	"""This function calculate enough TP for survive on quarantine or not"""
+	TP_USAGE_PER_DAY = 57
+	QUARANTINE_LENGTH = 14
+	AVG_TP_SIZE = 500
+	count_people = input_data["people"]
+	count_tp = input_data["tp"]
+	if count_people * TP_USAGE_PER_DAY * QUARANTINE_LENGTH <= count_tp * AVG_TP_SIZE:
+		print("I guess this people will survive")
+	else:
+		print("Not enough tp, ALERT NEED MORE TP")
+
+
+survive_without_TP({"people":6, "tp":10})
