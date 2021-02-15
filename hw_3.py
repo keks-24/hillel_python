@@ -7,8 +7,8 @@ import random
 def check_reminder(func):
 	"""decorator check remainder of division"""
 	@wraps(func)
-	def inner():
-		result = 100 % func()
+	def inner(*args):
+		result = 100 % func(*args)
 		print('we are ok' if not result else f"Bad news guys, we got {result}")
 	return inner
 
@@ -33,10 +33,12 @@ def check_variable_type(func):
 	@wraps(func)
 	def inner(arg):
 		try:
-			if int(arg):
+			if isinstance(arg, int):
 				func(arg)
+			if isinstance(arg, str):
+				print("string type is not supported")
 		except ValueError: # i tried did it task by using raise, but i dont like when code crush, so decided use try except
-			print("string type is not supported") # so i think that message should be smth like "value wasnt int"
+			print("some other type of data") # so i think that message should be smth like "value wasnt int"
 	return inner
 
 
@@ -47,7 +49,7 @@ def very_important_function(input_value):
 	return input_value
 
 
-very_important_function("2dd")
+very_important_function('test string')
 very_important_function(2)
 
 
@@ -56,20 +58,20 @@ very_important_function(2)
 
 def check_in_cache(func):
 	"""decorator that count calls of function, count calls from cache, and store result"""
-	cache = {
-		"func_call_count":0,
-		"cache_used":0
-	}
+	cache = {}
 	def inner(*args):
 		if args not in cache.keys():
 			cache[args] = {
 				"result":str(func(*args))
 			}
-			cache["func_call_count"] +=1
-			print(f"Function executed with counter = {cache['func_call_count']}, function result = {cache[args]['result']}")
+			inner.func_call_count +=1
+			print(f"Function executed with counter = {inner.func_call_count}, function result = {cache[args]['result']}")
 		else:
-			cache['cache_used'] += 1
-			print(f"Used cache with counter = {cache['cache_used']}")
+			inner.func_cache_used += 1
+			print(f"Used cache with counter = {inner.func_cache_used}")
+
+	inner.func_call_count = 0
+	inner.func_cache_used = 0
 	return inner
 
 
@@ -88,3 +90,5 @@ plus_func(3)
 plus_func(3)
 plus_func(4)
 plus_func(4)
+print(plus_func.func_cache_used)
+print(plus_func.func_call_count)
