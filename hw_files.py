@@ -60,6 +60,7 @@ def delete_words_from_file():
 
 
 def phone_review():
+	"""function that find surnames which started on 'C' and 'K'"""
 	path_file = f'{OS_PATH}/files/2.txt'
 	lines = open_file(path_file)
 	result = []
@@ -73,3 +74,17 @@ def phone_review():
 # phone_review()
 
 
+# ============================ TASK 3
+
+def right_align_data():
+	"""function that add whitespaces foreach line"""
+	path_file = f'{OS_PATH}/files/3.txt'
+	lines = open_file(path_file)
+	result = []
+	for line in lines:
+		new_line = line.rjust(120)
+		result.append(new_line)
+	write_file(path_file, result)
+
+
+right_align_data()
