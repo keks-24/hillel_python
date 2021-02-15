@@ -16,7 +16,7 @@ def write_file(path, result):
 	with open(path, 'w') as fw:
 		fw.write('\n'.join(result) + '\n')
 
-
+# in case of trouble, use this text like input info
 """
 reveal cancel as appetite fountain creep conglomerate
 building mathematics price jelly arise manufacture
@@ -116,14 +116,19 @@ def filter_ip_file():
 			filtred_ip[site_ip][1].append(week_day)
 		else:  # add first time find ip
 			filtred_ip[site_ip] = [[hours_time], [week_day]]
+
 	result = list()
 	max_same_time = []
 	for ip, elem in filtred_ip.items():
 		res_time, res_day = count_most_finded_elem(elem[0]), count_most_finded_elem(elem[1])
 		result.append([ip, len(elem[0]), res_day])
-		max_same_time.append(count_most_finded_elem(res_time))
-	pprint.pprint(result)
-	pprint.pprint(max_same_time)
+		max_same_time.append(res_time)
+
+	with open(f'{OS_PATH}/files/new_4.txt', 'w') as fw:
+		for elem in result:
+			string_to_write = f'ip: {elem[0]}, visits: {elem[1]}, popular day: {elem[2]} \n'
+			fw.write(string_to_write)
+		fw.write(f'most popular time: {count_most_finded_elem(max_same_time)}')
 
 
-filter_ip_file()
+# filter_ip_file()
