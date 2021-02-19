@@ -1,4 +1,5 @@
 import os
+import json
 
 list_of_ips = ["61.115.164.56", "131.136.232.245", "128.221.250.10", "56.162.8.100", "158.190.91.140"]
 
@@ -8,7 +9,8 @@ class IpManager:
 		self._ip_list = ip_list
 
 	def get_all_ips(self):
-		print(f"{[ip for ip in self._ip_list]}")
+		print(self._ip_list)
+		return self._ip_list
 
 	def __ip_split(self, ip):
 		return ip.split(".")
@@ -56,31 +58,33 @@ class FileManager:
 			return 'no such file'
 		return file_path
 
-	def open_file(self, which_file):
+	def open_file(self, file_path):
 		"""You should define in which file to write"""
-		file_path = self._file_chooser(which_file)
-		if os.path.exists(file_path):
-			with open(file_path, 'r') as fr:
-				data = fr.read()
-			print(data)
-			return data
-		else:
-			raise FileNotFoundError
+		try:
+			if os.path.exists(os.path.realpath(file_path)):
+				with open(file_path) as fr:
+					data = json.load(fr)
+				print(data)
+				return data
+			else:
+				raise FileNotFoundError
+		except json.JSONDecodeError:
+			raise json.JSONDecodeError
 
-	def write_file(self, which_file, some_info):
+	def write_file(self, file_path, some_info):
 		"""You should define in which file to write"""
 		if some_info:
-			file_path = self._file_chooser(which_file)
 			print(file_path)
 			with open(file_path, 'w') as fw:
 				fw.write(some_info)
 
 	def combine_two_files(self):
 		"""combine two files that is inside of object of class"""
-		data1 = self.open_file(1)
-		data2 = self.open_file(2)
-		with open('compared_file', 'w') as fw:
-			fw.write(data1 + data2)
+		data1 = self.open_file(self._first_file_path)
+		data2 = self.open_file(self._second_file_path)
+		with open('files/compared_file', 'w') as fw:
+			fw.write(json.dumps(data1, indent=4))
+			fw.write(json.dumps(data2, indent=4))
 
 	def get_relative_path(self, which_file):
 		file_path = self._file_chooser(which_file)
@@ -92,9 +96,9 @@ class FileManager:
 
 
 file_worker = FileManager('files/example_json_1.json', 'files/example_json_2.json')
-file_worker.open_file(1)
-file_worker.write_file(2, 'this data now will be in file 2')
+file_worker.open_file('files/example_json_2.json')
 file_worker.combine_two_files()
+file_worker.write_file('files/example_json_2.json', 'this data now will be in file 2')
 file_worker.get_relative_path(1)
 file_worker.get_absolute_path(1)
 
