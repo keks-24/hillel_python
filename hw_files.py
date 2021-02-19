@@ -13,8 +13,12 @@ def open_file(path):
 
 def write_file(path, result):
 	"""function that write result to file"""
-	with open(path, 'w') as fw:
-		fw.write('\n'.join(result) + '\n')
+	try:
+		with open(path, 'w') as fw:
+			fw.write('\n'.join(result) + '\n')
+	except Exception as e:
+		print(e)
+
 
 # in case of trouble, use this text like input info
 """
@@ -45,8 +49,9 @@ def delete_words_from_file():
 	result = []
 	for line in lines:
 		new_line = []
+		filtred_words = count_words_with_condition(line)
 		for word in line.split(' '):
-			if word not in count_words_with_condition(line):
+			if word not in filtred_words:
 				new_line.append(word)
 		final_line = ' '.join(new_line)
 		print(final_line)
@@ -54,7 +59,7 @@ def delete_words_from_file():
 	write_file(path_file, result)
 
 
-# delete_words_from_file()
+delete_words_from_file()
 
 
 # ============================ TASK 2
@@ -104,10 +109,8 @@ def count_most_finded_elem(value):
 	return elem
 
 
-def filter_ip_file():
-	path_file = f'{OS_PATH}/files/4.txt'
-	lines = open_file(path_file)
-	filtred_ip = dict()  # dict for store result
+def make_ip_dict(lines):
+	filtred_ip = dict()
 	for line in lines:
 		site_ip, visit_time, week_day = (line.split(' '))
 		hours_time = visit_time[0:2]
@@ -116,7 +119,13 @@ def filter_ip_file():
 			filtred_ip[site_ip][1].append(week_day)
 		else:  # add first time find ip
 			filtred_ip[site_ip] = [[hours_time], [week_day]]
+	return filtred_ip
 
+
+def filter_ip_file():
+	path_file = f'{OS_PATH}/files/4.txt'
+	lines = open_file(path_file)
+	filtred_ip = make_ip_dict(lines)  # dict for store result
 	result = list()
 	max_same_time = []
 	for ip, elem in filtred_ip.items():
