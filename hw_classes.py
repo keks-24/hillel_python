@@ -10,57 +10,97 @@ class IpManager:
 	def get_all_ips(self):
 		print(f"{[ip for ip in self._ip_list]}")
 
-	def __ip_spliter(self, ip):
+	def __ip_split(self, ip):
 		return ip.split(".")
 
 	def revert_ip(self):
 		result_list = []
 		for ip in self._ip_list:
-			result_list.append(".".join(reversed(self.__ip_spliter(ip))))
+			result_list.append(".".join(reversed(self.__ip_split(ip))))
 		print(result_list)
 
-	def remove_first_oktet(self):
+	def remove_first_octet(self):
 		result_list = []
 		for ip in self._ip_list:
-			result_list.append(".".join(self.__ip_spliter(ip)[1:4]))
+			result_list.append(".".join(self.__ip_split(ip)[1:4]))
 		print(result_list)
 
-	def show_last_oktet(self):
+	def show_last_octet(self):
 		result_list = []
 		for ip in self._ip_list:
-			result_list.append(self.__ip_spliter(ip)[3])
+			result_list.append(self.__ip_split(ip)[3])
 		print(result_list)
 
 
 ip_manage = IpManager(ip_list=list_of_ips)
 ip_manage.get_all_ips()
 ip_manage.revert_ip()
-ip_manage.remove_first_oktet()
-ip_manage.show_last_oktet()
+ip_manage.remove_first_octet()
+ip_manage.show_last_octet()
 
 # ------------- TASK 2
 
 
 class FileManager:
-	def __init__(self, file_name):
-		self._file_name = os.getcwd() + '\\files\\' + file_name
+	def __init__(self, first_file_path, second_file_path):
+		self._first_file_path = first_file_path
+		self._second_file_path = second_file_path
 
-	def open_file(self):
-		if os.path.exists(self._file_name):
-			with open(self._file_name,'r') as fr:
-				data_from_file = fr.read()
-			return data_from_file
+	def _file_chooser(self, which_file):
+		"""helper method that make choose with which file we want work"""
+		if which_file == 1:
+			file_path = os.path.realpath(self._first_file_path)
+		elif which_file == 2:
+			file_path = os.path.realpath(self._second_file_path)
+		else:
+			return 'no such file'
+		return file_path
+
+	def open_file(self, which_file):
+		"""You should define in which file to write"""
+		file_path = self._file_chooser(which_file)
+		if os.path.exists(file_path):
+			with open(file_path, 'r') as fr:
+				data = fr.read()
+			print(data)
+			return data
 		else:
 			raise FileNotFoundError
 
-	def write_file
+	def write_file(self, which_file, some_info):
+		"""You should define in which file to write"""
+		if some_info:
+			file_path = self._file_chooser(which_file)
+			print(file_path)
+			with open(file_path, 'w') as fw:
+				fw.write(some_info)
+
+	def combine_two_files(self):
+		"""combine two files that is inside of object of class"""
+		data1 = self.open_file(1)
+		data2 = self.open_file(2)
+		with open('compared_file', 'w') as fw:
+			fw.write(data1 + data2)
+
+	def get_relative_path(self, which_file):
+		file_path = self._file_chooser(which_file)
+		print(os.path.relpath(file_path))
+
+	def get_absolute_path(self, which_file):
+		file_path = self._file_chooser(which_file)
+		print(os.path.abspath(file_path))
 
 
+file_worker = FileManager('files/example_json_1.json', 'files/example_json_2.json')
+file_worker.open_file(1)
+file_worker.write_file(2, 'this data now will be in file 2')
+file_worker.combine_two_files()
+file_worker.get_relative_path(1)
+file_worker.get_absolute_path(1)
 
-file1 = FileManager('example_json_1.json')
-file1.open_file()
 
 # ------------- TASK 3
+
 
 class ConnectManager:
 	def __init__(self):
@@ -113,10 +153,8 @@ class ConnectManager:
 
 connector = ConnectManager()
 
-print(connector.login)
 connector.login = 'petya'
 print(connector.login)
 
-print(connector.password)
 connector.password = 1111
 print(connector.password)
