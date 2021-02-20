@@ -58,7 +58,8 @@ class FileManager:
 			return 'no such file'
 		return file_path
 
-	def open_file(self, file_path):
+	@staticmethod
+	def open_file(file_path):
 		"""You should define in which file to write"""
 		try:
 			if os.path.exists(os.path.realpath(file_path)):
@@ -98,7 +99,7 @@ class FileManager:
 file_worker = FileManager('files/example_json_1.json', 'files/example_json_2.json')
 file_worker.open_file('files/example_json_2.json')
 file_worker.combine_two_files()
-file_worker.write_file('files/example_json_2.json', 'this data now will be in file 2')
+# file_worker.write_file('files/example_json_2.json', 'this data now will be in file 2')
 file_worker.get_relative_path(1)
 file_worker.get_absolute_path(1)
 
