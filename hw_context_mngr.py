@@ -3,24 +3,27 @@ from contextlib import suppress
 
 
 class do_cd:
-	current_cwd = os.getcwd()
-
-	def __init__(self, path, *suppressed):
+	def __init__(self, path, *exc):
 		self.path = path
-		self.suppressed = suppressed
+		self.exc = exc
 
 	def __enter__(self):
-		self.new_dir = os.getcwd()
-		os.chdir(os.getcwd() + self.path)
+		self.current_cwd = os.getcwd()
+		try:
+			os.chdir(self.current_cwd + self.path)
+		except self.exc:
+			suppress(self.exc)
+		return self
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
-		print(exc_type)
-		print(exc_val)
-		print(exc_tb)
-		os.chdir(self.current_cwd)
-		return exc_type is not None and issubclass(exc_type, self.suppressed)
+		if self.exc:
+			os.chdir(self.current_cwd)
+		return self
 
 
-with do_cd('/some_unknown_dir', FileNotFoundError) as cd:
+with do_cd('/files1', FileNotFoundError) as cd:
 	print(os.getcwd())
+print(os.getcwd())
+
+
 
