@@ -1,9 +1,9 @@
 import os
 import time
-from contextlib import suppress, ContextDecorator
+from contextlib import suppress, contextmanager
 
 
-class do_cd(ContextDecorator):
+class do_cd:
 	"""context manager for 1 and 2 task sametimes"""
 	def __init__(self, path, *exc):
 		self.path = path
@@ -14,13 +14,11 @@ class do_cd(ContextDecorator):
 		try:
 			os.chdir(self.current_cwd + self.path)
 		except self.exc:
-			suppress(self.exc)
+			pass
 		return self
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
-		if self.exc:
-			os.chdir(self.current_cwd)
-		return self
+		os.chdir(self.current_cwd)
 
 
 with do_cd('/files', FileNotFoundError) as cd:
@@ -30,13 +28,22 @@ print(os.getcwd())
 # ------------- TASK 2
 
 
-@do_cd('/file', FileNotFoundError)
-def some_func():
-	print('i am function path')
+@contextmanager
+def context_manager_cd(path, *exc):
+	current_cwd = os.getcwd()
+	try:
+		os.chdir(current_cwd + path)
+	except exc:
+		suppress(exc)
+	print(os.getcwd())
+	yield
+
+	os.chdir(current_cwd)
 	print(os.getcwd())
 
 
-some_func()
+with context_manager_cd('/file1s', FileNotFoundError) as f:
+	print('i am print text inside context manager')
 
 
 # ------------- TASK 3
@@ -44,9 +51,6 @@ some_func()
 
 class count_func_execution:
 	"""context manager that count func execution time"""
-	def __init__(self):
-		self.func_time = None
-
 	def __enter__(self):
 		self.start_time = time.time()
 		return self
@@ -66,6 +70,6 @@ def some_func():
 	return b
 
 
-with count_func_execution() as f:
+with count_func_execution() as ft:
 	some_func()
-print(f'function time execution is: {f.func_time}')
+print(f'function time execution is: {ft.func_time}')
