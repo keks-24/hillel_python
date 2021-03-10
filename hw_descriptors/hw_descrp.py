@@ -29,18 +29,14 @@ class EmailClass:
 # --------------- task 2
 i = 0
 
+
 class Singleton(type):
 	_instances = {}
 
 	def __call__(cls, *args, **kwargs):
-		print(cls.__dict__)
-
 		if cls not in cls._instances:
 			cls._instances[cls] = cls
 			global i
-			i += 1
-			print(cls._instances)
-			print(i)
 		return cls
 
 
@@ -48,8 +44,35 @@ class MyClass(metaclass=Singleton):
 	pass
 
 
-c = MyClass()
-b = MyClass()
-print(id(c))
-print(id(b))
-assert id(c) == id(b), 'fail'
+# c = MyClass()
+# b = MyClass()
+# assert id(c) == id(b)
+
+
+# --------------- task 3
+
+class IngegerField:
+	class_state = {}
+
+	def __init__(self):
+		self.number = None
+
+	def __get__(self, instance, owner):
+		return self.class_state[instance]
+
+	def __set__(self, instance, value):
+		self.number = value
+		self.class_state[instance] = self.number
+
+
+class Data:
+	number = IngegerField()
+
+
+data_row = Data()
+new_data_row = Data()
+
+data_row.number = 5
+new_data_row.number = 10
+
+assert data_row.number != new_data_row.number
