@@ -54,9 +54,6 @@ class MyClass(metaclass=Singleton):
 class IngegerField:
 	class_state = {}
 
-	def __init__(self):
-		self.number = None
-
 	def __get__(self, instance, owner):
 		return self.class_state[instance]
 
