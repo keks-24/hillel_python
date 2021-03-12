@@ -14,6 +14,7 @@
 # 6) Товар может принадлежать к категории
 # 7) Распечатать список товаров с заданной категорией
 
+
 # 8) Корзина для покупок, в которой может быть много товаров с общей ценой.
 # 9) Добавить товары в корзину (вы не можете добавлять товары, если их нет в наличии)
 # 10) Распечатать элементы корзины покупок с ценой и общей суммой
@@ -24,6 +25,7 @@
 
 
 class PriceDescriptor:
+	"""descriptor that add NDS to price"""
 	def __set__(self, instance, value):
 		if value > 0:
 			instance._price = round(value * 1.2, 2)
@@ -35,6 +37,7 @@ class PriceDescriptor:
 
 
 class Product:
+	"""Class that represent product"""
 	price = PriceDescriptor()
 
 	def __init__(self, name, description='no description', quantity=None, availability=False, price=None):
@@ -81,28 +84,85 @@ class Product:
 
 
 class Storage:
+	"""Class that store all products"""
 	storage = {}
 
-	def __init__(self, product, category):
-		self.product_name = product._name
-		Storage.storage[product._name] = {
+	def add_to_storage(self, product: Product, category):
+		"""add product to storage"""
+
+		self.storage[product._name] = {
 			'description': product._description,
 			'quantity': product._quantity,
 			'availability': product._availability,
 			'price': product._price,
 			'category': category
 		}
+		print(f'Product - {product._name} add on storage')
+
+	def get_product(self, name):
+		"""get product by name"""
+
+		if name in self.storage.keys():
+			return self.storage[name]
+		else:
+			print('No such product')
+
+	def get_product_quantity(self, name):
+		"""get product quantity by name"""
+		return f"total quantity of {name} is {self.storage[name]['quantity']}"
+
+	def get_all_products_quantity(self):
+		result = {}
+		for key in self.storage.keys():
+			result[key] = self.storage[key]['quantity']
+		return result
+
+	def remove_product(self, name):
+		if name in self.storage.keys():
+			del self.storage[name]
+		else:
+			print('No such product')
+
+	def get_product_by_category(self, category):
+		result = []
+		for key in self.storage.keys():
+			if category == self.storage[key]['category']:
+				result.append(key)
+		return result
 
 	def __str__(self):
-		return f'Product - {self.product_name} add on storage'
+		return f'{self.storage}'
 
+
+class Basket:
+	"""class that represent shop basket"""
+
+
+	def __str__(self):
+		return f''
 
 bread = Product('bread', 'tasty fresh baked', True)
 bread.quantity = 14
 bread.price = 125
-print(bread)
 
-storage = Storage(bread, category='food')
+
+milk = Product('milk', 'fresh maked from farm', True)
+milk.quantity = 200
+milk.price = 15.99
+
+
+storage = Storage()
+storage.add_to_storage(bread, category='food')
+storage.add_to_storage(milk, category='food')
 print(storage)
+print(storage.get_product('Bread'))
+print(storage.get_product_quantity('Bread'))
+print(storage.get_product('Milk'))
+# storage.remove_product('Bread')
+# storage.remove_product('Bread')
+# storage.get_product('Bread')
+print(storage.get_all_products_quantity())
+print(storage.get_product_by_category('food'))
+
 
 
