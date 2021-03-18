@@ -23,10 +23,11 @@ print(next(check_line))
 print(next(check_line))
 print(next(check_line))
 print(next(check_line))
-print(next(check_line))
-print(next(check_line))
-print(next(check_line))
 
+
+# print(next(check_line))
+# print(next(check_line))
+# print(next(check_line))
 
 
 # Задача-2 (оригинальный вариант и его делать не обязательно):
@@ -48,27 +49,27 @@ print(next(check_line))
 
 # Структура пайплайна:
 # # ```
-def coroutine(*args):
-	# your code here
-
-
-@coroutine
-def grep(*args):
-	# your code here
-
-
-@coroutine
-def printer():
-	# your code here
-
-
-@coroutine
-def dispenser(*args):
-	# your code here
-
-
-def follow(*args):
-	# your code here
+# def coroutine(*args):
+# 	# your code here
+#
+#
+# @coroutine
+# def grep(*args):
+# 	# your code here
+#
+#
+# @coroutine
+# def printer():
+# 	# your code here
+#
+#
+# @coroutine
+# def dispenser(*args):
+# 	# your code here
+#
+#
+# def follow(*args):
+# 	# your code here
 # ```
 #
 # Каждый grep следит за определенной сигнатурой
@@ -95,7 +96,7 @@ def follow(*args):
 # https://www.dabeaz.com/coroutines/Coroutines.pdf
 
 
-#Задача-3 (упрощенный вариант делаете его если задача 2 показалась сложной)
+# Задача-3 (упрощенный вариант делаете его если задача 2 показалась сложной)
 # Вам нужно создать pipeline (конвеер, подобие pipeline в unix https://en.wikipedia.org/wiki/Pipeline_(Unix)).
 #
 # Схема пайплайна :
@@ -106,3 +107,45 @@ def follow(*args):
 # Например: Ваш source (это не корутина, не генератор и прочее, это просто функция ) в ней опеделите цикл из 10 элементов
 # которые будут по цепочке отправлены в каждый из корутин и в каждом из корутив вызвано сообщение о полученном элементе.
 # После вызова .close() вы должны в каждом из корутин вывести сообщение что работа завершена.
+
+
+def source(coro):
+	next(coro)
+	for i in range(0, 10):
+		coro.send(i)
+	coro.close()
+
+
+def coroutine1(coro):
+	try:
+		next(coro)
+		while True:
+			value = yield
+			print(f"c1 got {value}")
+			coro.send(value)
+	except GeneratorExit:
+		print('c1 job done')
+		coro.close()
+
+
+def coroutine2(sink):
+	try:
+		next(sink)
+		while True:
+			value = yield
+			print(f"c2 got {value}")
+			sink.send(value)
+	except GeneratorExit:
+		print('c2 job done')
+
+
+def sink():
+	try:
+		while True:
+			number = yield
+			print('Sink received number: ', number)
+	except GeneratorExit:
+		print('Sink closed.')
+
+
+source(coroutine1(coroutine2(sink())))
