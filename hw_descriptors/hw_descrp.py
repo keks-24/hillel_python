@@ -27,26 +27,23 @@ class EmailClass:
 
 
 # --------------- task 2
-i = 0
-
 
 class Singleton(type):
 	_instances = {}
 
 	def __call__(cls, *args, **kwargs):
 		if cls not in cls._instances:
-			cls._instances[cls] = cls
-			global i
-		return cls
+			cls._instances[cls] = super().__call__(*args, **kwargs)
+		return cls._instances[cls]
 
 
 class MyClass(metaclass=Singleton):
 	pass
 
 
-# c = MyClass()
-# b = MyClass()
-# assert id(c) == id(b)
+c = MyClass()
+b = MyClass()
+assert id(c) == id(b)
 
 
 # --------------- task 3
@@ -66,10 +63,10 @@ class Data:
 	number = IngegerField()
 
 
-data_row = Data()
-new_data_row = Data()
-
-data_row.number = 5
-new_data_row.number = 10
-
-assert data_row.number != new_data_row.number
+# data_row = Data()
+# new_data_row = Data()
+#
+# data_row.number = 5
+# new_data_row.number = 10
+#
+# assert data_row.number != new_data_row.number

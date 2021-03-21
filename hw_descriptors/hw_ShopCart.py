@@ -5,7 +5,7 @@ from pprint import pprint
 class PriceDescriptor:
 	"""descriptor that add NDS to price"""
 	def __set__(self, instance, value):
-		if value > 0:
+		if value:
 			instance._price = round(value * 1.2, 2)
 		else:
 			raise ValueError('Not valid price')
@@ -141,12 +141,12 @@ class Basket:
 	def get_basket_prod_and_price(self):  # элементы корзины покупок с ценой и общей суммой
 		result_list = {}
 		total_sum = 0
-		_ = []
+		result_prod_list = []
 		for key in self.order_product_list.keys():
 			total_sum += self.order_product_list[key]['price'] * self.order_product_list[key]['count']
-			_.append(key)
+			result_prod_list.append(key)
 			result_list = {
-				'products': _,
+				'products': result_prod_list,
 				'total summ': total_sum
 			}
 
