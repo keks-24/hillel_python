@@ -1,0 +1,13 @@
+string 1
+string 2
+string 3
+python
+string 4
+is
+great
+is
+python
+string 4
+is
+great
+is

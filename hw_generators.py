@@ -1,8 +1,6 @@
 # Задача-1
-# У вас есть файл из нескольких строк. Нужно создать генератор который будет построчно выводить строки из вашего файла.
-# При вызове итерировании по генератору необходимо проверять строки на уникальность.
-# Если строка уникальна, тогда ее выводим на экран, если нет - скипаем
 import os
+import time
 
 
 def check_unique_string_generator():
@@ -13,8 +11,6 @@ def check_unique_string_generator():
 		if line.rstrip() not in checked_line:
 			checked_line.append(line.rstrip())
 			yield line.rstrip()
-		else:
-			pass
 
 
 check_line = check_unique_string_generator()
@@ -23,92 +19,67 @@ print(next(check_line))
 print(next(check_line))
 print(next(check_line))
 print(next(check_line))
-
-
 # print(next(check_line))
 # print(next(check_line))
 # print(next(check_line))
 
 
-# Задача-2 (оригинальный вариант и его делать не обязательно):
-# представим есть файл с логами, его нужно бессконечно контролировать
-# на предмет возникнования заданных сигнатур.
-#
-# Необходимо реализовать пайплайн из корутин, который подключается к существующему файлу
-# по принципу команды tail, переключается в самый конец файла и с этого момента начинает следить
-# за его наполнением, и в случае возникнования запиcей, сигнатуры которых мы отслеживаем -
-# печатать результат
-#
+# Задача-2 пришлось подсмотреть
 # Архитектура пайплайна
-
 #                    --------
 #                   /- grep -\
 # dispenser(file) <- - grep - -> pprint
 #                   \- grep -/
 #                    --------
+def coroutine(func):
+	"""activate coroutine"""
+	def start(*args,**kwargs):
+		cr = func(*args, **kwargs)
+		next(cr)
+		return cr
+	return start
 
-# Структура пайплайна:
-# # ```
-# def coroutine(*args):
-# 	# your code here
-#
-#
-# @coroutine
-# def grep(*args):
-# 	# your code here
-#
-#
-# @coroutine
-# def printer():
-# 	# your code here
-#
-#
-# @coroutine
-# def dispenser(*args):
-# 	# your code here
-#
-#
-# def follow(*args):
-# 	# your code here
-# ```
-#
-# Каждый grep следит за определенной сигнатурой
-#
-# Как это будет работать:
-#
-# ```
-# f_open = open('log.txt') # подключаемся к файлу
-# follow(f_open,
-#        # делегируем ивенты
-#        dispenser([
-#            grep('python', printer()), # отслеживаем
-#            grep('is', printer()),     # заданные
-#            grep('great', printer()),  # сигнатуры
-#        ])
-#        )
-# ```
+
+@coroutine
+def grep(*args):
+	grep_word = args[0]  # искомое слово
+	while True:
+		line = (yield)  # полученная линия из dispenser
+		if grep_word in line:
+			args[1].send(line)  # шлем в принтер найденую линию если нашли слово в строке
+
+
+@coroutine
+def printer():
+	while True:
+		line = yield  # получаем линию которую завалидил grep
+		print(line)
+
+
+@coroutine
+def dispenser(*args):
+	while True:
+		item = yield
+		for coro in list(*args):  # в каждую корутину шлем строку полученную из follow
+			coro.send(item)
+
+
+def follow(file_open, dispenser_coro):
+	while True:
+		line = file_open.readline().rstrip()  # вычитываем строку из открытого файла
+		if not line:
+			time.sleep(0.1)  # символическая задержка
+			continue
+		dispenser_coro.send(line)  # отправляем строку в dispenser
+
+
+f_open = open(os.getcwd() + '/files/log.txt', 'r')  # читаем файл
+prnt = printer()
+follow(f_open, dispenser([grep('python', prnt), grep('is', prnt), grep('great', prnt)]))
 # Как только в файл запишется что-то содержащее ('python', 'is', 'great') мы сможем это увидеть
-#
-# Итоговая реализация фактически будет асинхронным ивент хендлером, с отсутствием блокирующих операций.
-#
-# Если все плохо - план Б лекция Дэвида Бизли
-# [warning] решение там тоже есть :)
-# https://www.dabeaz.com/coroutines/Coroutines.pdf
 
 
-# Задача-3 (упрощенный вариант делаете его если задача 2 показалась сложной)
-# Вам нужно создать pipeline (конвеер, подобие pipeline в unix https://en.wikipedia.org/wiki/Pipeline_(Unix)).
-#
-# Схема пайплайна :
-# source ---send()--->coroutine1------send()---->coroutine2----send()------>sink
-#
-# Все что вам нужно сделать это выводить сообщение о том что было получено на каждом шаге и обработку ошибки GeneratorExit.
-#
-# Например: Ваш source (это не корутина, не генератор и прочее, это просто функция ) в ней опеделите цикл из 10 элементов
-# которые будут по цепочке отправлены в каждый из корутин и в каждом из корутив вызвано сообщение о полученном элементе.
-# После вызова .close() вы должны в каждом из корутин вывести сообщение что работа завершена.
-
-
+# # Задача-3
 def source(coro):
 	next(coro)
 	for i in range(0, 10):
