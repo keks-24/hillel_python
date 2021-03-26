@@ -4,13 +4,20 @@ import time
 
 
 def check_unique_string_generator():
-	with open(os.getcwd() + '/files/hw_9.txt', 'r') as f:
-		lines = f.readlines()
-	checked_line = []
-	for line in lines:
-		if line.rstrip() not in checked_line:
-			checked_line.append(line.rstrip())
-			yield line.rstrip()
+	try:
+		file_path = os.getcwd() + '/files/hw_9.txt'
+		if os.path.exists(os.path.realpath(file_path)):
+			with open(file_path, 'r') as f:
+				lines = f.readlines()
+			checked_line = []
+			for line in lines:
+				if line.rstrip() not in checked_line:
+					checked_line.append(line.rstrip())
+					yield line.rstrip()
+		else:
+			raise FileNotFoundError
+	except StopIteration:
+		print('Finish iteration')
 
 
 check_line = check_unique_string_generator()
