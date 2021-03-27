@@ -1,15 +1,3 @@
-# Вашей задачей будет создать сервер агрегатор (он выполнит несколько запросов на адреса сторонних сайтов).
-# Количество сайтов и сами сайты на которые вы будете слать реквесты вы определяете сами
-# (вот например по ссылке ниже найдете список популярных ресурсов, но, как правило, они требуют регистрации,
-# после чего они предоставят вам что-то типа ключа с которым вы сможете запросить информацию)
-#
-# 1) Познакомиться с фреймворком AIOHTTP (https://docs.aiohttp.org/en/stable/).
-# 2)Создать сервер который мог бы принимать GET запросы на адрес (http://localhost/collect_info)
-# 3) В ответе должна быть агрегирована информация полученная от сторонних ресурсов.
-#
-# https://rapidapi.com/blog/most-popular-api/?utm_source=google&utm_medium=cpc&utm_campaign=Beta_100613405446&utm_term=%2Bapi_b&gclid=Cj0KCQjwudb3BRC9ARIsAEa-vUs9wupOfL1RSzBiu31y12XUuS02AH8zdZv6UyMocYy5khg9stSoXA4aAkDUEALw_wcB
-
-
 from aiohttp import web
 import json
 import requests
