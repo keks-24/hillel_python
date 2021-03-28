@@ -1,52 +1,50 @@
 from aiohttp import web, ClientSession
 
 
-async def get_covid():
-	session = ClientSession()
-	url = "https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/total"
-
-	querystring = {"country": "Ukraine"}
-
-	headers = {
-		'x-rapidapi-key': "52807abab7msha07c6984af16427p177ed8jsnb79c51c4bd57",
-		'x-rapidapi-host': "covid-19-coronavirus-statistics.p.rapidapi.com"
+apis_dict = {
+	'api_1': {
+		'url': 'https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/total',
+		'params': {"country": "Ukraine"},
+		'headers': {'x-rapidapi-key': "52807abab7msha07c6984af16427p177ed8jsnb79c51c4bd57",
+					'x-rapidapi-host': "covid-19-coronavirus-statistics.p.rapidapi.com"},
+		'result': 'data',  # that field will take yours data from each request, and add it to result key
+		'description': 'covid'  # that field will be a key in a result
+	},
+	'api_2': {
+		'url': 'https://icanhazdadjoke.com/',
+		'headers': {
+			'Accept': "application/json"},
+		'result': 'joke',
+		'description': 'super_joke'
+	},
+	'api_3': {
+		'url': 'https://cat-fact.herokuapp.com/facts/random?animal_type=cat&amount=1',
+		'result': 'text',
+		'description': 'cats_facts'
 	}
-
-	async with session.get(url, headers=headers, params=querystring) as resp:
-		result = await resp.json()
-	await session.close()
-	return result['data']
+}
 
 
-async def get_joke():
-	session = ClientSession()
-	url = "https://icanhazdadjoke.com/"
+async def requester_urls():
+	result_list = {}
 
-	headers = {
-		'Accept': "application/json"
-	}
-
-	async with session.get(url, headers=headers) as resp:
-		result = await resp.json()
-	await session.close()
-	return result['joke']
-
-
-async def get_fact_about_cats():
-	session = ClientSession()
-	async with session.get('https://cat-fact.herokuapp.com/facts/random?animal_type=cat&amount=1') as resp:
-		result = await resp.json()
-	await session.close()
-	return result['text']
+	for api in apis_dict.keys():
+		session = ClientSession()
+		async with session.get(url=apis_dict[api]['url'],
+									headers=apis_dict[api]['headers'] if apis_dict.get(api).get('headers') else None,
+									params=apis_dict[api]['params'] if apis_dict.get(api).get('params') else None) as resp:
+			result = await resp.json()
+			await session.close()
+			result_list[apis_dict[api]['description']] = result[apis_dict[api]['result']]
+		await ClientSession.close(self=ClientSession())
+	return result_list
 
 
 async def handle(request):
-	response_covid = await get_covid()
-	response_joke = await get_joke()
-	response_cat_fact = await get_fact_about_cats()
+	response = await requester_urls()
+	print(response)
 
-	text = "Covid info: " + str(response_covid) + "\n" + "Super joke: " + str(response_joke) + '\n' + 'Fact about cat: ' + str(response_cat_fact)
-	return web.Response(text=text)
+	return web.Response(text=f" covid info: {response['covid']}\n super joke: {response['super_joke']}\n cats facts: {response['cats_facts']}\n")
 
 
 app = web.Application()
