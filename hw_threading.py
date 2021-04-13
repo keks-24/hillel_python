@@ -1,4 +1,4 @@
-from aiohttp import web, ClientSession
+from aiohttp import web, ClientSession, TCPConnector
 
 
 apis_dict = {
@@ -29,20 +29,18 @@ async def requester_urls():
 	result_list = {}
 
 	for api in apis_dict.keys():
-		session = ClientSession()
-		async with session.get(url=apis_dict[api]['url'],
+		async with ClientSession(connector=TCPConnector(verify_ssl=False)) as session:
+			async with session.get(url=apis_dict[api]['url'],
 									headers=apis_dict[api]['headers'] if apis_dict.get(api).get('headers') else None,
 									params=apis_dict[api]['params'] if apis_dict.get(api).get('params') else None) as resp:
-			result = await resp.json()
-			await session.close()
+				print(resp.headers)
+				result = await resp.json()
 			result_list[apis_dict[api]['description']] = result[apis_dict[api]['result']]
-		await ClientSession.close(self=ClientSession())
 	return result_list
 
 
 async def handle(request):
 	response = await requester_urls()
-	print(response)
 
 	return web.Response(text=f" covid info: {response['covid']}\n super joke: {response['super_joke']}\n cats facts: {response['cats_facts']}\n")
 
