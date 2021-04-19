@@ -8,8 +8,11 @@ services:
       POSTGRES_USER: keks
       POSTGRES_DB: example_db
       POSTGRES_PASSWORD: example
+    volumes:
+      - .psql:/var/lib/postgresql/data
     ports:
     - 127.0.0.1:5432:5432
+
 
   adminer:
     image: adminer
