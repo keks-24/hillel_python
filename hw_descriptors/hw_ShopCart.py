@@ -76,9 +76,9 @@ class Storage:
 				'price': product.price,
 				'category': category
 			}
-			print(f'Product - {product.name} add on storage')
+			return f'Product - {product.name} add on storage'
 		else:
-			print(f'Product - {product.name} already at storage')
+			return f'Product - {product.name} already at storage'
 
 	def get_product(self, name):
 		"""get product by name"""
@@ -103,7 +103,7 @@ class Storage:
 		if name in self.storage.keys():
 			del self.storage[name]
 		else:
-			print('No such product')
+			return 'No such product'
 
 	def get_product_by_category(self, category):
 		result = []
@@ -134,7 +134,7 @@ class Basket:
 					'count': 1
 				}
 			else:
-				print(f'Product {product.name} not available or out of sale')  # если товар недостуен по каой то причине
+				return f'Product {product.name} not available or out of sale'  # если товар недостуен по каой то причине
 		else:
 			self.order_product_list[product.name]['count'] += 1 # если продукт уже в корзине просто увеличиваем кол-во
 
@@ -192,76 +192,76 @@ class Basket:
 # Добавить к этой задаче дескриптор для аттрибута цена.
 # При назначении цены товара будет автоматически добавлен НДС 20%
 # При получении цены товара, цена возврщается уже с учетом НДС
-bread = Product(name='Bread', description='tasty fresh baked', availability=True)
-bread.quantity = 6
-bread.price = 125
-
-milk = Product(name='Milk', description='fresh made from farm', availability=True)
-milk.quantity = 20
-milk.price = 15.99
-
-soap = Product(name='Soap', description='clean up hands after walk', availability=True)
-soap.quantity = 10
-soap.price = 35.90
-
-
-# 2) Добавить товар на склад
-storage = Storage()
-storage.add_to_storage(bread, category='food')
-storage.add_to_storage(milk, category='food')
-storage.add_to_storage(soap, category='cleaning')
-
-
-# 3) Удалить товар со склада
-storage.remove_product('Soap')
-
-
-# 4) Распечатать остаток товара по его имени
-print(storage.get_product_quantity('Bread'))
-print(storage.get_product('Bread'))
-print(storage.get_product('Milk'))
+# bread = Product(name='Bread', description='tasty fresh baked', availability=True)
+# bread.quantity = 6
+# bread.price = 125
+#
+# milk = Product(name='Milk', description='fresh made from farm', availability=True)
+# milk.quantity = 20
+# milk.price = 15.99
+#
+# soap = Product(name='Soap', description='clean up hands after walk', availability=True)
+# soap.quantity = 10
+# soap.price = 35.90
+#
+#
+# # 2) Добавить товар на склад
+# storage = Storage()
+# storage.add_to_storage(bread, category='food')
+# storage.add_to_storage(milk, category='food')
+# storage.add_to_storage(soap, category='cleaning')
+#
+#
+# # 3) Удалить товар со склада
+# storage.remove_product('Soap')
+#
+#
+# # 4) Распечатать остаток товара по его имени
+# print(storage.get_product_quantity('Bread'))
+# print(storage.get_product('Bread'))
+# print(storage.get_product('Milk'))
 
 
 # 5) Распечатать остаток всех товаров
-print(storage.get_all_products_quantity())
-
-# 7) Распечатать список товаров с заданной категорией
-print(storage.get_product_by_category('food'))
-
-
-# 8) Корзина для покупок, в которой может быть много товаров с общей ценой.
-basket_1 = Basket()
-
-
-# 9) Добавить товары в корзину (вы не можете добавлять товары, если их нет в наличии)
-basket_1.add_product_to_basket(bread)
-basket_1.add_product_to_basket(bread)
-basket_1.add_product_to_basket(bread)
-basket_1.add_product_to_basket(bread)
-basket_1.add_product_to_basket(milk)
-
-
-# 10) Распечатать элементы корзины покупок с ценой и общей суммой
-print(basket_1.get_basket_prod_and_price())
-
-
-# 11) Оформить заказ и распечатать детали заказа по его номеру
-pprint(basket_1.checkout())
-
-
-# 11 распечатать детали заказа по его номеру
-pprint(basket_1.get_order_info_by_order_id(order_id=1))
-
-# ---------- второй заказ в котором можно проверить реакцию если раскупят товар, availability и тд
-basket_2 = Basket()
-
-basket_2.add_product_to_basket(bread)
-basket_2.add_product_to_basket(bread)
-basket_2.add_product_to_basket(milk)
-basket_2.add_product_to_basket(milk)
-
-print(basket_2.get_basket_prod_and_price())
-
-pprint(basket_2.checkout())
-
-pprint(basket_1.get_order_info_by_order_id(order_id=2))
+# print(storage.get_all_products_quantity())
+#
+# # 7) Распечатать список товаров с заданной категорией
+# print(storage.get_product_by_category('food'))
+#
+#
+# # 8) Корзина для покупок, в которой может быть много товаров с общей ценой.
+# basket_1 = Basket()
+#
+#
+# # 9) Добавить товары в корзину (вы не можете добавлять товары, если их нет в наличии)
+# basket_1.add_product_to_basket(bread)
+# basket_1.add_product_to_basket(bread)
+# basket_1.add_product_to_basket(bread)
+# basket_1.add_product_to_basket(bread)
+# basket_1.add_product_to_basket(milk)
+#
+#
+# # 10) Распечатать элементы корзины покупок с ценой и общей суммой
+# print(basket_1.get_basket_prod_and_price())
+#
+#
+# # 11) Оформить заказ и распечатать детали заказа по его номеру
+# pprint(basket_1.checkout())
+#
+#
+# # 11 распечатать детали заказа по его номеру
+# pprint(basket_1.get_order_info_by_order_id(order_id=1))
+#
+# # ---------- второй заказ в котором можно проверить реакцию если раскупят товар, availability и тд
+# basket_2 = Basket()
+#
+# basket_2.add_product_to_basket(bread)
+# basket_2.add_product_to_basket(bread)
+# basket_2.add_product_to_basket(milk)
+# basket_2.add_product_to_basket(milk)
+#
+# print(basket_2.get_basket_prod_and_price())
+#
+# pprint(basket_2.checkout())
+#
+# pprint(basket_1.get_order_info_by_order_id(order_id=2))

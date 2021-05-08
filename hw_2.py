@@ -29,7 +29,7 @@ def rock_scissors_paper_game(user_item):
 		return WIN_STR
 
 
-print(rock_scissors_paper_game(input("Type: paper or scissors or rock ")))
+# print(rock_scissors_paper_game(input("Type: paper or scissors or rock ")))
 
 # ========================================================================
 
@@ -44,7 +44,7 @@ def survive_without_TP(input_data):
 		print("Not enough tp, ALERT NEED MORE TP")
 
 
-survive_without_TP({"people":6, "tp":10})
+# survive_without_TP({"people":6, "tp":10})
 
 # ========================================================================
 
@@ -62,7 +62,7 @@ def encrypt_func(input_string):
 	return final_word
 
 
-print(encrypt_func(input("Print some word: ")))
+# print(encrypt_func(input("Print some word: ")))
 
 # ========================================================================
 
@@ -88,7 +88,7 @@ def tic_tac_toe(input):
 		return "no winner"
 
 
-print(tic_tac_toe([["X", "E", "X"],
-				   ["O", "O", "X"],
-				   ["X", "X", "O"]
-				   ]))
+# print(tic_tac_toe([["X", "E", "X"],
+# 				   ["O", "O", "X"],
+# 				   ["X", "X", "O"]
+# 				   ]))
