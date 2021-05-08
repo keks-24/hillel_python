@@ -22,14 +22,12 @@ def product_milk():
 
 @pytest.fixture(scope="session")
 def storage():
-	storage = Storage()
-	return storage
+	return Storage()
 
 
 @pytest.fixture(scope="session")
 def basket():
-	basket = Basket()
-	return basket
+	return Basket()
 
 
 def test_product_name(product_bread):
